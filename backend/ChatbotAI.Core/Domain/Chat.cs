@@ -1,5 +1,5 @@
-﻿using ChatbotAI.Core.Interfaces;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using ChatbotAI.Core.Interfaces;
 
 namespace ChatbotAI.Core.Domain
 {
@@ -16,10 +16,6 @@ namespace ChatbotAI.Core.Domain
 
         [Required]
         public bool IsDeleted { get; set; }
-
-        //public Guid? CreatedBy { get; set; }
-
-        //public Guid? ModifiedBy { get; set; }
 
         // ---------------------------------------
 

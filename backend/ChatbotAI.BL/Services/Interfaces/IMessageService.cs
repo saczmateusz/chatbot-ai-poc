@@ -1,14 +1,14 @@
-﻿using ChatbotAI.DAL.DTOs;
+﻿using ChatbotAI.Core.Domain;
+using ChatbotAI.DAL.DTOs.Message;
 
 namespace ChatbotAI.BL.Services.Interfaces
 {
     public interface IMessageService
     {
-        Task CreateAsync(MessageDTO message, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<MessageAIResponseDTO> GenerateResponseStreamAsync(string message, Guid chatId, CancellationToken cancellationToken);
+        Task<Message> CreateAsync(MessageUserRequestDTO message, CancellationToken cancellationToken = default);
+        Task<Message> CreateAIMessageAsync(string content, Guid chatId, Guid messageId, CancellationToken cancellationToken = default);
         Task UpdateAsync(MessageDTO message, CancellationToken cancellationToken = default);
-        //Task DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default);
-        //Task<List<MessageDTO>> GetAllAsync(CancellationToken cancellationToken = default);
-        //Task<MessageDTO?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<List<MessageDTO>> GetByChatIdAsync(Guid chatId, CancellationToken cancellationToken = default);
     }
 }

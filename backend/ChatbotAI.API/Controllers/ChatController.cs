@@ -1,5 +1,6 @@
-using ChatbotAI.Core.Domain;
 using Microsoft.AspNetCore.Mvc;
+using ChatbotAI.BL.Services.Interfaces;
+using ChatbotAI.DAL.DTOs.Chat;
 
 namespace ChatbotAI.API.Controllers
 {
@@ -7,57 +8,31 @@ namespace ChatbotAI.API.Controllers
     [Route("[controller]")]
     public class ChatController : ControllerBase
     {
+        private readonly IChatService _chatService;
         private readonly ILogger<ChatController> _logger;
 
-        public ChatController(ILogger<ChatController> logger)
+        public ChatController(ILogger<ChatController> logger, IChatService chatService)
         {
             _logger = logger;
+            _chatService = chatService;
         }
 
-        [HttpGet("Chat/GetAll")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetChats(CancellationToken cancellationToken = default)
         {
-            // Simulate fetching chats
-            var chats = new List<Chat>
-            {
-                new Chat
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Chat 1",
-                    DateCreated = DateTime.UtcNow,
-                    DateModified = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new Chat
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Chat 2",
-                    DateCreated = DateTime.UtcNow,
-                    DateModified = DateTime.UtcNow,
-                    IsDeleted = false
-                }
-            };
-            return Ok(chats);
+            var result = await _chatService.GetAllAsync(cancellationToken);
+            return Ok(result);
         }
 
-        [HttpGet("Chat/{id}")]
-        public async Task<IActionResult> GetChatById(Guid id, CancellationToken cancellationToken = default)
+        [HttpPost("Create")]
+        public async Task<IActionResult> CreateChat([FromBody] CreateChatDTO chat, CancellationToken cancellationToken = default)
         {
-            if (id == Guid.Empty)
+            if (chat == null || string.IsNullOrWhiteSpace(chat.Name))
             {
-                return BadRequest("Invalid chat ID.");
+                return BadRequest("Chat name is required.");
             }
-
-            // Simulate fetching chat by ID
-            var chat = new Chat
-            {
-                Id = id,
-                Name = "Sample Chat",
-                DateCreated = DateTime.UtcNow,
-                DateModified = DateTime.UtcNow,
-                IsDeleted = false
-            };
-            return Ok(chat);
+            var result = await _chatService.CreateAsync(chat, cancellationToken);
+            return CreatedAtAction(nameof(CreateChat), result);
         }
     }
 }

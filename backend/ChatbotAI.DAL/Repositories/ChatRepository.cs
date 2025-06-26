@@ -1,7 +1,7 @@
-﻿using ChatbotAI.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using ChatbotAI.Core;
 using ChatbotAI.Core.Domain;
 using ChatbotAI.DAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace ChatbotAI.DAL.Repositories
 {
@@ -43,7 +43,7 @@ namespace ChatbotAI.DAL.Repositories
 
         public async Task<List<Chat>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _entities.ToListAsync(cancellationToken);
+            var result = await _entities.OrderByDescending(c => c.DateCreated).ToListAsync(cancellationToken);
             return result;
         }
 

@@ -15,9 +15,5 @@ namespace ChatbotAI.Core.Interfaces
 
         [Required]
         public bool IsDeleted { get; set; }
-
-        //public Guid? CreatedBy { get; set; }
-
-        //public Guid? ModifiedBy { get; set; }
     }
 }

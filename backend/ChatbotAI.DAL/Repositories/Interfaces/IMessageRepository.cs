@@ -9,6 +9,7 @@ namespace ChatbotAI.DAL.Repositories.Interfaces
         public void Delete(Message entity);
         public void DeleteById(Guid id);
         public Task<List<Message>> GetAllAsync(CancellationToken cancellationToken = default);
+        public Task<List<Message>> GetByChatIdAsync(Guid chatId, CancellationToken cancellationToken = default);
         public Task<Message?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

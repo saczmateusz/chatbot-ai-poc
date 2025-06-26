@@ -1,6 +1,6 @@
-﻿using ChatbotAI.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 using ChatbotAI.Core.Domain;
-using Microsoft.EntityFrameworkCore;
+using ChatbotAI.Core.Interfaces;
 
 namespace ChatbotAI.Core
 {

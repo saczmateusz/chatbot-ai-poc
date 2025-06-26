@@ -1,6 +1,6 @@
 ﻿using ChatbotAI.BL.Services.Interfaces;
 using ChatbotAI.Core.Domain;
-using ChatbotAI.DAL.DTOs;
+using ChatbotAI.DAL.DTOs.Chat;
 using ChatbotAI.DAL.Services.Interfaces;
 
 namespace ChatbotAI.BL.Services
@@ -14,10 +14,9 @@ namespace ChatbotAI.BL.Services
             UOW = uow;
         }
 
-        public async Task CreateAsync(ChatDTO chat, CancellationToken cancellationToken = default)
+        public async Task<GetChatDTO> CreateAsync(CreateChatDTO chat, CancellationToken cancellationToken = default)
         {
             var chatGuid = Guid.NewGuid();
-
             var entity = new Chat()
             {
                 Id = chatGuid,
@@ -26,34 +25,23 @@ namespace ChatbotAI.BL.Services
 
             UOW.Chats.Create(entity);
             await UOW.SaveAsync(cancellationToken);
+            return new GetChatDTO()
+            {
+                Id = entity.Id,
+                DateCreated = entity.DateCreated,
+                Name = entity.Name,
+            };
         }
 
-        public async Task<List<ChatDTO>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<GetChatDTO>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var chats = await UOW.Chats.GetAllAsync(cancellationToken);
-            return chats.Select(chat => new ChatDTO()
+            return chats.Select(chat => new GetChatDTO()
             {
                 Id = chat.Id,
-                Name = chat.Name
+                DateCreated = chat.DateCreated,
+                Name = chat.Name,
             }).ToList();
-        }
-
-        public async Task<ChatDTO?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            if (id == Guid.Empty)
-            {
-                return null;
-            }
-            var chat = await UOW.Chats.GetByIdAsync(id, cancellationToken);
-            if (chat == null)
-            {
-                return null;
-            }
-            return new ChatDTO()
-            {
-                Id = chat.Id,
-                Name = chat.Name
-            };
         }
     }
 }
