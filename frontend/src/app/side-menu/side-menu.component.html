@@ -1,0 +1,19 @@
+<div class="side-menu">
+  <div class="side-menu__container">
+    <ng-container *ngIf="chats.length; else noChats">
+      <a
+        mat-button
+        *ngFor="let chat of chats"
+        [routerLink]="['/chat', chat.id]"
+        routerLinkActive="side-menu__chat-link--active"
+        class="side-menu__chat-link"
+        [routerLinkActiveOptions]="{ exact: false }"
+      >
+        <div>{{ chat.name }}</div>
+      </a>
+    </ng-container>
+    <ng-template #noChats>
+      <div class="side-menu__no-chats">No chats found.</div>
+    </ng-template>
+  </div>
+</div>

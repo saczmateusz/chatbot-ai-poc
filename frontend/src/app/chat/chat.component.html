@@ -1,0 +1,99 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>AI Chatbot</h2>
+    <button mat-raised-button (click)="newChat()" *ngIf="chatId">
+      New Chat
+    </button>
+  </div>
+
+  <div id="chat-messages" class="chat-messages">
+    <div
+      *ngFor="let message of messages"
+      class="message"
+      [ngClass]="{
+        'user-message': message.sender === 'user',
+        'ai-message': message.sender === 'ai'
+      }"
+    >
+      <div class="message-content">
+        <p>{{ message.content }}</p>
+        <div
+          class="reactions-container"
+          *ngIf="message.sender === 'ai' && !isTyping"
+        >
+          <button
+            mat-icon-button
+            class="reaction-up"
+            [class.selected]="message.reaction === ReactionType.Like"
+            (click)="
+              addReaction(
+                message.id!,
+                message.reaction === ReactionType.Like
+                  ? ReactionType.None
+                  : ReactionType.Like
+              )
+            "
+          >
+            <mat-icon>thumb_up</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="reaction-down"
+            [class.selected]="message.reaction === ReactionType.Dislike"
+            (click)="
+              addReaction(
+                message.id!,
+                message.reaction === ReactionType.Dislike
+                  ? ReactionType.None
+                  : ReactionType.Dislike
+              )
+            "
+          >
+            <mat-icon>thumb_down</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isTyping" class="typing-indicator">
+      <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <small>AI is typing...</small>
+    </div>
+  </div>
+
+  <form
+    [formGroup]="chatForm"
+    (ngSubmit)="onSubmit()"
+    class="chat-input-container"
+  >
+    <div class="chat-input-group">
+      <textarea
+        formControlName="message"
+        placeholder="Type your message..."
+        (keypress)="onKeyPress($event)"
+        [disabled]="isTyping"
+        rows="1"
+      ></textarea>
+      <button
+        mat-flat-button
+        type="submit"
+        [disabled]="!chatForm.valid || isTyping"
+        *ngIf="!isTyping"
+      >
+        <span>Send</span>
+      </button>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="stopResponse()"
+        *ngIf="isTyping"
+      >
+        <span>Stop</span>
+      </button>
+    </div>
+  </form>
+</div>
