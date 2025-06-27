@@ -9,7 +9,7 @@ Microsoft SQL Server
 
 ### Installation
 
-Before running the app, fill appSettings.Development.json:  
+Before running the app, fill appSettings.json:  
 ```js
 {
   "ConnectionStrings": {
